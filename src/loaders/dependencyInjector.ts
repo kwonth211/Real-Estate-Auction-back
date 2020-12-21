@@ -26,8 +26,8 @@ const dependencyInjector = async () => {
 
       // console.log("Saved successfully.");
 
-      const loadedPosts = await repository.findAll();
-      console.log("All loaded posts: ", loadedPosts);
+      // const loadedPosts = await repository.findAll();
+      // console.log("All loaded posts: ", loadedPosts);
     })
     .catch((error) => {
       console.log("Error: ", error);
