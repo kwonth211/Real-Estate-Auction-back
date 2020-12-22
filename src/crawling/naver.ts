@@ -1,59 +1,78 @@
 import { debug } from "console";
 import puppeteer from "puppeteer";
+import { court, product } from "./../loaders/crawlingLoader";
 
-const naverCrawling = async (page, data) => {
-  //   const data = [];
+const naverCrawling = async (page, courtList: Array<court>) => {
+  for (let [index, court] of courtList.entries()) {
+    let { locationList } = court;
 
-  //   let { location, itemNumber } = data[6];
-  //   let queryString = "";
+    locationList.forEach(({ location, area }) => {
+      // 법원 매물이 여러개 있을때를 생각해 봐야함.
+      // console.log(location);
+      // console.log(area);
+    });
 
-  //   if (itemNumber.includes("아파트")) {
-  //     const reg = /[\{\}\[\]\/?.,;:|\)*~`!^\-_+<>@\#$%&\\\=\(\'\"]/gi;
+    const { location } = locationList[0];
 
-  //     if (reg.test(location)) {
-  //       location = location.replace(reg, "");
-  //     }
+    const queryString = location
+      .split("(")[1]
+      ?.substr(0, location.split("(")[1].length - 1);
 
-  //     queryString =
-  //       location.split(" ")[0] +
-  //       location.split(" ")[1] +
-  //       location.split(" ")[location.split(" ").length - 1];
-  //   } else if (itemNumber.includes("상가오피스텔근린시설")) {
-  //   } else if (itemNumber.includes("단독주택다가구")) {
-  //   }
-  await page.goto(
-    `https://new.land.naver.com/search?sk=대전광역시대덕구목상동상록수아파트`
-  );
-  //
-  //   await page.goto(`https://new.land.naver.com/search?sk=${queryString}`);
-  page.waitForNavigation();
-  //   const data = {};
-  const listLength = await page.$$eval(
-    `#articleListArea > div`,
-    (data) => data.length
-  );
-
-  let Quote = 0;
-  for (let i = 1; i <= listLength; i++) {
-    const text = await page.$eval(
-      `#articleListArea > div:nth-child(${i}) > div > a`,
-      (data) => data.textContent
-    );
-
-    if (text.includes("매매")) {
-      //법원 면적이 아니면 pass
-      data.gubun = "매매";
-      data.buildingNumber = text.split("아파트")[0].split("매매")[0];
-      data.Quote += text.split("아파트")[0].split("매매")[1];
-      data.area = text.split("아파트")[1].split(",")[0];
-      data.floors = text.split("아파트")[1].split(",")[1];
-      //   data.area = text.split("아파트")[1].split(",")[0];
+    if (!queryString) {
+      continue;
     }
-    debugger;
+    try {
+      //검색해서 안나오면 재낌.
+      await page.goto(`https://new.land.naver.com/search?sk=${queryString}`);
+      // await page.waitForNavigation({ waitUntil: "networkidle2" });
+
+      await waitForSeconds();
+    } catch (e) {
+      console.log(e);
+    }
+
+    const listLength = await page.$$eval(
+      `#articleListArea > div`,
+      (data) => data.length
+    );
+    console.log(`네이버 ${queryString} 매물 갯수 :  ` + listLength);
+
+    let Quote = 0;
+    const productList = [];
+    for (let i = 1; i <= listLength; i++) {
+      const text = await page.$eval(
+        `#articleListArea > div:nth-child(${i}) > div > a`,
+        (data) => data.textContent
+      );
+      if (text.includes("매매")) {
+        //Todo 법원 매물과 동일한 면적인지 봐야함
+        const product: product = {};
+
+        const productAreaText = text.split("아파트")[1].split(",")[0];
+        const areaType = productAreaText.split("/")[0];
+        const area = productAreaText.split("/")[1];
+
+        product.gubun = "매매";
+        product.buildingNumber = text.split("아파트")[0].split("매매")[0];
+        product.Quote = text.split("아파트")[0].split("매매")[1];
+        product.floors = text.split("아파트")[1].split(",")[1];
+        product.areaType = areaType;
+        product.area = area;
+        productList.push(product);
+        courtList[index].productList = productList;
+      }
+    }
   }
 
-  //   #articleListArea > div:nth-child(2) > div > a
-  console.log(listLength);
+  return courtList;
+};
+
+const waitForSeconds = async () => {
+  return new Promise<void>((resolve, reject) => {
+    setTimeout(() => {
+      return resolve();
+    }, 2000);
+  });
 };
 
 export default naverCrawling;

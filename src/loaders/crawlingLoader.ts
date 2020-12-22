@@ -2,16 +2,31 @@ import courtCrawling from "@/crawling/court";
 import naverCrawling from "@/crawling/naver";
 import puppeteer from "puppeteer";
 
-export interface auction {
+export interface court {
   caseNumber?: string;
   itemNumber?: string;
-  location?: string;
-  area?: string;
+  usaAge?: string;
+  locationList?: Array<location>;
   remark?: string;
   appraisalValue?: string;
   minimumSellingPrice?: string;
   saleDate?: string;
   progress?: string;
+  productList?: Array<product>;
+}
+
+export interface location {
+  location?: string;
+  area?: string;
+}
+
+export interface product {
+  gubun?: string;
+  buildingNumber?: string;
+  Quote?: string;
+  floors?: string;
+  areaType?: string;
+  area?: string;
 }
 
 const crawlingLoader = async () => {
@@ -27,12 +42,11 @@ const crawlingLoader = async () => {
     height: 1080,
   });
 
-  // const data = await courtCrawling(page);
-  const data = [];
+  const data = await courtCrawling(page);
 
   const naverData = await naverCrawling(page, data);
 
-  console.log(data);
+  console.log(naverData);
 };
 
 export default crawlingLoader;

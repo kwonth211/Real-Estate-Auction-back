@@ -1,12 +1,12 @@
 import { EntityManager, Repository } from "typeorm";
 import { Service } from "typedi";
 
-import { User } from "../entity/User";
+import { User } from "@/entity";
 import { InjectRepository } from "@/decorators/InjectRepository";
 import { InjectManager } from "@/decorators/InjectManager";
 
 @Service()
-export class UserRepository {
+export default class UserRepository {
   @InjectManager()
   private entityManager: EntityManager;
 
