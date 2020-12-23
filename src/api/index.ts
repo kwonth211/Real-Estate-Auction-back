@@ -1,8 +1,13 @@
 import { Router } from "express";
-import { user } from "./routes";
+import { userRouter, noticeRouter, courtRouter } from "./routes";
 export default () => {
   const app = Router();
-  user(app);
+
+  userRouter(app);
+
+  noticeRouter(app);
+
+  courtRouter(app);
 
   return app;
 };

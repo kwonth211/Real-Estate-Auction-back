@@ -1,7 +1,14 @@
 import { Router, Request, Response, NextFunction } from "express";
-
+import { Container } from "typedi";
+import {
+  LandRepository,
+  CourtRepository,
+  CourtLocationRepository,
+} from "@/repository";
+import { Court } from "@/entity";
+import { getManager } from "typeorm";
 const route = Router();
-const user = (app: Router) => {
+const userRouter = (app: Router) => {
   app.use("/user", route);
 
   const findUser = async (req: Request, res: Response, next: NextFunction) => {
@@ -9,6 +16,12 @@ const user = (app: Router) => {
     // const { user, token } = await authServiceInstance.SignUp(
     //   req.body as IUserInputDTO
     // );
+
+    const postRepository = getManager().getRepository(Court);
+
+    const posts = await postRepository.find();
+    // const courtRepository = Container.get(CourtRepository);
+    // debugger;
     res.send({ userId: 3 });
     // return res.status(201).json({ user, token });
   };
@@ -24,4 +37,4 @@ const user = (app: Router) => {
 
   route.put("/updateuser", updateUser);
 };
-export default user;
+export default userRouter;

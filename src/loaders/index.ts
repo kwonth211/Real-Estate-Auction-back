@@ -4,7 +4,7 @@ import mongooseLoader from "./mongooseLoader";
 import crawlingLoader from "./crawlingLoader";
 
 export default async ({ expressApp }) => {
-  await expressLoader({ app: expressApp });
   // const crawlingData = await crawlingLoader();
-  // await dependencyInjectorLoader(crawlingData);
+  await dependencyInjectorLoader();
+  await expressLoader({ app: expressApp });
 };

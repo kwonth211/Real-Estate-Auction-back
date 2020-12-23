@@ -1,7 +1,7 @@
 import { Router, Request, Response, NextFunction } from "express";
 
 const route = Router();
-const user = (app: Router) => {
+const noticeRouter = (app: Router) => {
   app.use("/notice", route);
 
   const findNotice = async (
@@ -23,4 +23,4 @@ const user = (app: Router) => {
 
   route.put("/updatenotice", deleteNotice);
 };
-export default user;
+export default noticeRouter;
