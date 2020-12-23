@@ -1,6 +1,6 @@
 import { debug } from "console";
 import puppeteer from "puppeteer";
-import { court, product } from "./../loaders/crawlingLoader";
+import { court, land } from "./../loaders/crawlingLoader";
 
 const naverCrawling = async (page, courtList: Array<court>) => {
   for (let [index, court] of courtList.entries()) {
@@ -13,10 +13,7 @@ const naverCrawling = async (page, courtList: Array<court>) => {
     });
 
     const { location } = locationList[0];
-
-    const queryString = location
-      .split("(")[1]
-      ?.substr(0, location.split("(")[1].length - 1);
+    const queryString = location.split("(")[1]?.split("아파트")[0];
 
     if (!queryString) {
       continue;
@@ -35,7 +32,7 @@ const naverCrawling = async (page, courtList: Array<court>) => {
       `#articleListArea > div`,
       (data) => data.length
     );
-    console.log(`네이버 ${queryString} 매물 갯수 :  ` + listLength);
+    console.log(`네이버 > ${queryString} 매물 갯수 :  ` + listLength);
 
     let Quote = 0;
     const productList = [];
@@ -46,7 +43,7 @@ const naverCrawling = async (page, courtList: Array<court>) => {
       );
       if (text.includes("매매")) {
         //Todo 법원 매물과 동일한 면적인지 봐야함
-        const product: product = {};
+        const product: land = {};
 
         const productAreaText = text.split("아파트")[1].split(",")[0];
         const areaType = productAreaText.split("/")[0];
@@ -59,7 +56,7 @@ const naverCrawling = async (page, courtList: Array<court>) => {
         product.areaType = areaType;
         product.area = area;
         productList.push(product);
-        courtList[index].productList = productList;
+        courtList[index].landList = productList;
       }
     }
   }

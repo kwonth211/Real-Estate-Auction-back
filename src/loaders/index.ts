@@ -5,6 +5,6 @@ import crawlingLoader from "./crawlingLoader";
 
 export default async ({ expressApp }) => {
   await expressLoader({ app: expressApp });
-  // await crawlingLoader();
-  await dependencyInjectorLoader();
+  // const crawlingData = await crawlingLoader();
+  // await dependencyInjectorLoader(crawlingData);
 };

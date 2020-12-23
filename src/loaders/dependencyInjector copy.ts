@@ -1,20 +1,14 @@
 import "reflect-metadata";
 import { createConnection, useContainer, Connection } from "typeorm";
 import { Container } from "typedi";
-import {
-  LandRepository,
-  CourtRepository,
-  CourtLocationRepository,
-} from "../repository";
+import { UserRepository, CourtRepository } from "../repository";
 import { User, Court, Land, CourtLocation } from "@/entity";
 
 const dependencyInjector = async (crawlingDataList) => {
   useContainer(Container);
   createConnection()
     .then(async (connection) => {
-      const courtRepository = Container.get(CourtRepository);
-      const courtLocationRepository = Container.get(CourtLocationRepository);
-      const landRepository = Container.get(LandRepository);
+      const repository = Container.get(UserRepository);
 
       for (const courtData of crawlingDataList) {
         const {
@@ -44,18 +38,16 @@ const dependencyInjector = async (crawlingDataList) => {
         courtSchema.saleDate = saleDate;
         courtSchema.progress = progress;
 
-        await courtRepository.saveUsingManager(courtSchema);
-        // await connection.manager.save(courtSchema);
+        await connection.manager.save(courtSchema);
 
         for (const { location, area } of locationList) {
-          const courtLocationSchema = new CourtLocation();
+          const courtLocationSchema = new Courtlocation();
 
           courtLocationSchema.court = courtSchema;
           courtLocationSchema.location = location;
           courtLocationSchema.area = area;
 
-          await courtLocationRepository.saveUsingManager(courtLocationSchema);
-          // await connection.manager.save(courtLocationSchema);
+          await connection.manager.save(courtLocationSchema);
         }
         for (const land of landList) {
           const { gubun, buildingNumber, Quote, floors, areaType, area } = land;
@@ -70,8 +62,7 @@ const dependencyInjector = async (crawlingDataList) => {
           landSchema.area = area;
           landSchema.floors = floors;
 
-          await landRepository.saveUsingManager(landSchema);
-          // await connection.manager.save(landSchema);
+          await connection.manager.save(landSchema);
         }
 
         // const userRepository = connection.getRepository(Court);

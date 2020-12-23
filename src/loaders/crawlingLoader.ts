@@ -6,13 +6,13 @@ export interface court {
   caseNumber?: string;
   itemNumber?: string;
   usaAge?: string;
-  locationList?: Array<location>;
   remark?: string;
   appraisalValue?: string;
   minimumSellingPrice?: string;
   saleDate?: string;
   progress?: string;
-  productList?: Array<product>;
+  locationList?: Array<location>;
+  landList?: Array<land>;
 }
 
 export interface location {
@@ -20,7 +20,7 @@ export interface location {
   area?: string;
 }
 
-export interface product {
+export interface land {
   gubun?: string;
   buildingNumber?: string;
   Quote?: string;
@@ -33,7 +33,7 @@ const crawlingLoader = async () => {
   console.log("크롤링 시작 !");
 
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
   });
   const page = await browser.newPage();
   await page.setDefaultNavigationTimeout(0);
@@ -46,7 +46,7 @@ const crawlingLoader = async () => {
 
   const naverData = await naverCrawling(page, data);
 
-  console.log(naverData);
+  return naverData;
 };
 
 export default crawlingLoader;
