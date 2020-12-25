@@ -1,10 +1,6 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { Container } from "typedi";
-import {
-  LandRepository,
-  CourtRepository,
-  CourtLocationRepository,
-} from "@/repository";
+import { CourtRepository } from "@/repository";
 const route = Router();
 const courtRouter = (app: Router) => {
   app.use("/court", route);
@@ -16,9 +12,14 @@ const courtRouter = (app: Router) => {
   ) => {
     const courtRepository = Container.get(CourtRepository);
 
-    const court = await courtRepository.findAll();
+    const courtList = await courtRepository.findAll({
+      relations: ["locationList"],
+    });
 
-    res.send(court);
+    res.send({
+      status: "ok",
+      courtList,
+    });
   };
   route.get("/", findCourtList);
 

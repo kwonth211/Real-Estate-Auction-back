@@ -5,7 +5,7 @@ import puppeteer from "puppeteer";
 export interface court {
   caseNumber?: string;
   itemNumber?: string;
-  usaAge?: string;
+  useAge?: string;
   remark?: string;
   appraisalValue?: string;
   minimumSellingPrice?: string;

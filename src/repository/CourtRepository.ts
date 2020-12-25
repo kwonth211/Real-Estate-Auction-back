@@ -21,8 +21,8 @@ export default class CourtRepository {
   //     return this.InjectRepository.save(court);
   //   }
 
-  findAll() {
-    return this.InjectRepository.find();
+  findAll(relation) {
+    return this.InjectRepository.find(relation);
   }
   remove(entity) {
     return this.entityManager.remove(entity);

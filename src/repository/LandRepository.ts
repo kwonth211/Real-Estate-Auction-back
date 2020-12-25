@@ -24,6 +24,10 @@ export default class LandRepository {
   findAll() {
     return this.InjectRepository.find();
   }
+
+  findLandList(query) {
+    return this.InjectRepository.find(query);
+  }
   remove(entity) {
     return this.entityManager.remove(entity);
   }

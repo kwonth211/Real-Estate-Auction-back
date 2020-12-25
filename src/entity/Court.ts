@@ -18,7 +18,7 @@ export default class Court {
   itemNumber?: string;
 
   @Column()
-  usaAge?: string;
+  useAge?: string;
 
   @Column()
   remark?: string;

@@ -95,7 +95,7 @@ const getTr = async (page, index) => {
   //물건번호
   const itemNumber = decodingText(itemNumberText).substr(0, 1);
   //용도
-  const usaAge = decodingText(itemNumberText).substr(1);
+  const useAge = decodingText(itemNumberText).substr(1);
   //비고
   const remark = decodingText(remarkText);
   //감정평가액
@@ -110,14 +110,14 @@ const getTr = async (page, index) => {
   court = {
     caseNumber,
     itemNumber,
-    usaAge,
+    useAge,
     remark,
     appraisalValue,
     minimumSellingPrice,
     saleDate,
     progress,
   };
-  switch (usaAge) {
+  switch (useAge) {
     case "아파트":
       break;
     case "자동차":
