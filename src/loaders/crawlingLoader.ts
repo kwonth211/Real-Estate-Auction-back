@@ -1,7 +1,8 @@
 import courtCrawling from "@/crawling/court";
 import naverCrawling from "@/crawling/naver";
 import puppeteer from "puppeteer";
-
+import { Container } from "typedi";
+import { CourtRepository, LandRepository } from "@/repository";
 export interface court {
   caseNumber?: string;
   itemNumber?: string;
@@ -23,15 +24,17 @@ export interface location {
 export interface land {
   gubun?: string;
   buildingNumber?: string;
-  Quote?: string;
+  quote?: string;
   floors?: string;
   areaType?: string;
   area?: string;
 }
 
 const crawlingLoader = async () => {
-  console.log("크롤링 시작 !");
+  console.log("==크롤링 시작 ==");
 
+  const courtRepository = Container.get(CourtRepository);
+  const landRepository = Container.get(LandRepository);
   const browser = await puppeteer.launch({
     headless: true,
   });

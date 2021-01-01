@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, ManyToOne } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToOne,
+  JoinColumn,
+} from "typeorm";
 import Court from "./Court";
 
 @Entity()
@@ -10,20 +16,24 @@ export default class Land {
   gubun?: string;
 
   @Column()
-  buildingNumber: string;
+  building_number: string;
 
   @Column()
-  Quote: string;
+  quote: string;
 
   @Column()
   floors: string;
 
   @Column()
-  areaType: string;
+  area_type: string;
 
   @Column()
   area: string;
 
-  @ManyToOne(() => Court, (court) => court.landList)
-  court: Court;
+  @ManyToOne(() => Court, (court) => court.land_list, {
+    cascade: true,
+    onDelete: "CASCADE",
+  })
+  @JoinColumn({ name: "court_id", referencedColumnName: "court_id" })
+  court_id: Court;
 }

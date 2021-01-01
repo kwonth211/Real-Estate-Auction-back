@@ -12,37 +12,34 @@ export default class Court {
   court_id: number;
 
   @Column()
-  caseNumber?: string;
+  case_number?: string;
 
   @Column()
-  itemNumber?: string;
+  item_number?: string;
 
   @Column()
-  useAge?: string;
+  useage?: string;
 
   @Column()
   remark?: string;
 
   @Column()
-  appraisalValue?: string;
+  appraisal_value?: string;
 
   @Column()
-  minimumSellingPrice?: string;
+  minimum_selling_price?: string;
 
   @Column()
-  saleDate?: string;
+  sale_date?: string;
 
   @Column()
   progress?: string;
 
-  @Column()
-  location?: string;
+  @OneToMany((type) => CourtLocation, (courtLocation) => courtLocation.court_id)
+  location_list?: CourtLocation[];
 
-  @OneToMany((type) => CourtLocation, (courtLocation) => courtLocation.court)
-  locationList?: CourtLocation[];
-
-  @OneToMany((type) => Land, (land) => land.court)
-  landList?: Land[];
+  @OneToMany((type) => Land, (land) => land.court_id)
+  land_list?: Land[];
 
   // @OneToMany((type) => Photo, (photo) => photo.author) // note: we will create author property in the Photo class below
   // landList: Photo[];

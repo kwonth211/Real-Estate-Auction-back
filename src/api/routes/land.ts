@@ -9,6 +9,8 @@ const route = Router();
 const courtRouter = (app: Router) => {
   app.use("/land", route);
 
+  const landRepository = Container.get(LandRepository);
+
   const findLandListSchema = {
     courtId: Joi.number().empty("").required(),
   };
@@ -20,11 +22,11 @@ const courtRouter = (app: Router) => {
   ) => {
     const { courtId } = utils.validate(findLandListSchema, req, next);
 
-    const landRepository = Container.get(LandRepository);
-
-    const landList = await landRepository.findLandList({
+    const ret = await landRepository.findLandList({
       where: { court: courtId },
     });
+
+    const landList = utils.toRows(ret);
 
     res.send({
       status: 200,

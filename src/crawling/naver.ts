@@ -51,7 +51,7 @@ const naverCrawling = async (page, courtList: Array<court>) => {
 
         product.gubun = "매매";
         product.buildingNumber = text.split("아파트")[0].split("매매")[0];
-        product.Quote = text.split("아파트")[0].split("매매")[1];
+        product.quote = text.split("아파트")[0].split("매매")[1];
         product.floors = text.split("아파트")[1].split(",")[1];
         product.areaType = areaType;
         product.area = area;

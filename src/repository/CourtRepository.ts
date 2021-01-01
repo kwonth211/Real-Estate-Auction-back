@@ -21,10 +21,14 @@ export default class CourtRepository {
   //     return this.InjectRepository.save(court);
   //   }
 
-  findAll(relation) {
+  findCourtList(relation) {
     return this.InjectRepository.find(relation);
   }
-  remove(entity) {
-    return this.entityManager.remove(entity);
+  delete(entity) {
+    return this.InjectRepository.delete(entity);
+  }
+
+  clear() {
+    return this.InjectRepository.clear();
   }
 }

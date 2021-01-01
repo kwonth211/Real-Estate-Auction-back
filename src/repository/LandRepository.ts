@@ -31,4 +31,7 @@ export default class LandRepository {
   remove(entity) {
     return this.entityManager.remove(entity);
   }
+  clear() {
+    return this.InjectRepository.clear();
+  }
 }

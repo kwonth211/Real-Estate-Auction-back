@@ -28,4 +28,7 @@ export default class CourtlocationRepository {
   remove(entity) {
     return this.entityManager.remove(entity);
   }
+  clear() {
+    return this.InjectRepository.clear();
+  }
 }

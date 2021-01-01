@@ -9,6 +9,7 @@ const ErrorMiddleWare = async (err, req, res, next) => {
   //   }
 
   try {
+    console.error(err.message);
     const decoded = JSON.parse(err.message);
     const { statusCode } = decoded;
 

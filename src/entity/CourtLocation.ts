@@ -4,6 +4,7 @@ import {
   Column,
   OneToMany,
   ManyToOne,
+  JoinColumn,
 } from "typeorm";
 import Court from "./Court";
 @Entity()
@@ -17,6 +18,10 @@ export default class CourtLocation {
   @Column()
   area?: string;
 
-  @ManyToOne(() => Court, (court) => court.locationList)
-  court: Court;
+  @ManyToOne(() => Court, (court) => court.location_list, {
+    cascade: true,
+    onDelete: "CASCADE",
+  })
+  @JoinColumn({ name: "court_id", referencedColumnName: "court_id" })
+  court_id: Court;
 }

@@ -61,6 +61,16 @@ const validateSchema = (schema, parameters) => {
   return value;
 };
 
+const toRows = (result) => {
+  if (!result) {
+    throw new Error(errors.internal("invalid parameter error: toRows()"));
+  }
+
+  const camelCaseRows = result.map((snakeCaseRow) => toCamelCase(snakeCaseRow));
+
+  return camelCaseRows;
+};
+
 const toCamelCase = (params) => {
   if (_.isUndefined(params) || _.isNull(params)) {
     // throw new Error(errors.internal("invalid parameter error: toCamelCase()"));
@@ -138,6 +148,7 @@ function getFileName(originFileName) {
 }
 
 export default {
+  toRows,
   getFileName,
   toCamelCase,
   toSnakeCase,
