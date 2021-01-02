@@ -31,12 +31,10 @@ export interface land {
 }
 
 const crawlingLoader = async () => {
-  console.log("==크롤링 시작 ==");
+  console.log("== 크롤링 시작 ==");
 
-  const courtRepository = Container.get(CourtRepository);
-  const landRepository = Container.get(LandRepository);
   const browser = await puppeteer.launch({
-    headless: true,
+    headless: false,
   });
   const page = await browser.newPage();
   await page.setDefaultNavigationTimeout(0);

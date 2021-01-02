@@ -21,10 +21,11 @@ const dependencyInjector = async ({ crawling }) => {
       const courtLocationRepository = Container.get(CourtLocationRepository);
       const landRepository = Container.get(LandRepository);
 
-      await courtRepository.delete({});
-      console.log("==데이터 삭제 완료==");
-
       const crawlingDataList = await crawlingLoader();
+
+      return;
+      console.log("==데이터 삭제 완료==");
+      await courtRepository.delete({});
 
       for (const courtData of crawlingDataList) {
         const {
@@ -51,14 +52,12 @@ const dependencyInjector = async ({ crawling }) => {
         courtSchema.sale_date = saleDate;
         courtSchema.progress = progress;
         await courtRepository.saveUsingManager(courtSchema);
-        // await connection.manager.save(courtSchema);
         for (const { location, area } of locationList) {
           const courtLocationSchema = new CourtLocation();
           courtLocationSchema.court_id = courtSchema;
           courtLocationSchema.location = location;
           courtLocationSchema.area = area;
           await courtLocationRepository.saveUsingManager(courtLocationSchema);
-          // await connection.manager.save(courtLocationSchema);
         }
         for (const land of landList) {
           const { gubun, buildingNumber, quote, floors, areaType, area } = land;
@@ -72,17 +71,7 @@ const dependencyInjector = async ({ crawling }) => {
           landSchema.area = area;
           landSchema.floors = floors;
           await landRepository.saveUsingManager(landSchema);
-          // await connection.manager.save(landSchema);
         }
-        // const userRepository = connection.getRepository(Court);
-        // const users = await userRepository.find();
-        // console.log("court" + users);
-        // const photoRepository = connection.getRepository(CourtLocation);
-        // const photos = await photoRepository.find({ relations: ["court"] });
-        // console.log(photos);
-        // const landRepository = connection.getRepository(Land);
-        // const lands = await landRepository.find({ relations: ["court"] });
-        // console.log(lands);
       }
     })
     .catch((error) => {

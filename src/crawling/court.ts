@@ -132,7 +132,7 @@ const getTr = async (page, index) => {
   );
   //소재지
   const locationList: Array<location> = [];
-  console.log(`법원 소재지 갯수 :`, tdLength);
+  // console.log(`법원 소재지 갯수 :`, tdLength);
   for (let i = 1; i <= tdLength; i++) {
     totalCount++;
     const temp = await page.$eval(
