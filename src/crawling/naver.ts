@@ -59,10 +59,10 @@ const naverCrawling = async (page, courtList: Array<court>) => {
       if (!text) {
         continue;
       }
-      const productAreaText = text.split("아파트")[1].split(",")[0];
+      const productAreaText = text.split("아파트")[1]?.split(",")[0];
 
-      const area = productAreaText.split("/")[1];
-      //Todo 법원 매물과 동일한 면적인지 검사 +- 0.5
+      const area = productAreaText?.split("/")[1];
+      //Todo 법원 매물과 동일한 면적인지 검사 +- 2
       if (!productValidateCheck(locationList[0].area, area)) {
         continue;
       }

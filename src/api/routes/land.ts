@@ -23,7 +23,7 @@ const courtRouter = (app: Router) => {
     const { courtId } = utils.validate(findLandListSchema, req, next);
 
     const ret = await landRepository.findLandList({
-      where: { court: courtId },
+      where: { court_id: courtId },
     });
 
     const landList = utils.toRows(ret);

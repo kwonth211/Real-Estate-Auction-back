@@ -34,7 +34,7 @@ const crawlingLoader = async () => {
   console.log("== 크롤링 시작 ==");
 
   const browser = await puppeteer.launch({
-    headless: false,
+    headless: true,
   });
   const page = await browser.newPage();
   await page.setDefaultNavigationTimeout(0);
