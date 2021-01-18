@@ -10,8 +10,8 @@ const TYPE_OF_STRING = "string";
 
 const validate = (schema, req, next) => {
   const params = {
-    ...req?.request?.query,
-    ...req?.request?.body,
+    ...req?.query,
+    ...req?.body,
     ...req?.params,
   };
 

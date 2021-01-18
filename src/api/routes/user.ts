@@ -1,15 +1,51 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { Container } from "typedi";
-import {
-  LandRepository,
-  CourtRepository,
-  CourtLocationRepository,
-} from "@/repository";
-import { Court } from "@/entity";
+import Joi from "@hapi/joi";
+
+import { UserRepository } from "@/repository";
+import utils from "@/common/utils";
+import { User } from "@/entity";
 import { getManager } from "typeorm";
 const route = Router();
 const userRouter = (app: Router) => {
-  app.use("/user", route);
+  app.use("/auth", route);
+
+  const userRepository = Container.get(UserRepository);
+
+  const createUserSchema = {
+    email: Joi.string().required(),
+    nickname: Joi.string().required(),
+    name: Joi.string().required(),
+    password: Joi.string().required(),
+  };
+  const createUser = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    const { email, nickname, name, password } = utils.validate(
+      createUserSchema,
+      req,
+      next
+    );
+
+    const user = new User();
+    user.email = email;
+    user.nickname = nickname;
+    user.name = name;
+    user.password = password;
+
+    try {
+      // ** todo throw error && error reject
+      await userRepository.saveUsingManager(user);
+      res.send({
+        status: 200,
+      });
+    } catch (error) {
+      throw error;
+    }
+  };
+  route.post("/signup", createUser);
 
   const findUser = async (req: Request, res: Response, next: NextFunction) => {
     // const authServiceInstance = Container.get(AuthService);
@@ -17,7 +53,7 @@ const userRouter = (app: Router) => {
     //   req.body as IUserInputDTO
     // );
 
-    const postRepository = getManager().getRepository(Court);
+    const postRepository = getManager().getRepository(User);
 
     const posts = await postRepository.find();
     // const courtRepository = Container.get(CourtRepository);

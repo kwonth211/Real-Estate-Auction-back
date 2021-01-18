@@ -14,12 +14,12 @@ export default class UserRepository {
     @InjectRepository(User) private InjectRepository: Repository<User>
   ) {}
 
-  saveUsingRepository(post: User) {
-    return this.InjectRepository.save(post);
-  }
+  // saveUsingRepository(post: User) {
+  //   return this.InjectRepository.save(post);
+  // }
 
-  saveUsingManager(post: User) {
-    return this.entityManager.save(post);
+  saveUsingManager(user: User) {
+    return this.entityManager.save(user);
   }
 
   findAll() {
