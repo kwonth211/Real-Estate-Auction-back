@@ -25,7 +25,7 @@ const validate = (schema, req, next) => {
         errors.encode({
           hint: "요청 파라메터 오류",
           message: message,
-          statusCode: 400,
+          status: 400,
         })
       )
     );
@@ -33,7 +33,7 @@ const validate = (schema, req, next) => {
     //   errors.encode({
     //     hint: "요청 파라메터 오류",
     //     message: message,
-    //     statusCode: 400,
+    //     status: 400,
     //   })
     // );
   }
@@ -53,7 +53,7 @@ const validateSchema = (schema, parameters) => {
     //   errors.encode({
     //     hint: "요청 파라메터 오류",
     //     message: message,
-    //     statusCode: 400,
+    //     status: 400,
     //   })
     // );
   }

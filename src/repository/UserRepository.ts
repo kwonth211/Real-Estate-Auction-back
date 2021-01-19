@@ -25,4 +25,9 @@ export default class UserRepository {
   findAll() {
     return this.InjectRepository.find();
   }
+
+  //unnecessary typing
+  findOne(query): Promise<User> {
+    return this.InjectRepository.findOne(query);
+  }
 }

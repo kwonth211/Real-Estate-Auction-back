@@ -11,9 +11,9 @@ const ErrorMiddleWare = async (err, req, res, next) => {
   try {
     console.error(err.message);
     const decoded = JSON.parse(err.message);
-    const { statusCode } = decoded;
+    const { status } = decoded;
 
-    res.status(err.status || statusCode);
+    res.status(err.status || status);
     res.json({
       status: "error",
       message: decoded && decoded.message ? decoded.message : "",
@@ -27,7 +27,7 @@ const ErrorMiddleWare = async (err, req, res, next) => {
       status: "error",
       message: "처리되지 않은 오류 입니다.",
       error: {
-        statusCode: 500,
+        status: 500,
         hint: err.message,
       },
     });

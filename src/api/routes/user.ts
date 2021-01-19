@@ -1,11 +1,16 @@
 import { Router, Request, Response, NextFunction } from "express";
 import { Container } from "typedi";
 import Joi from "@hapi/joi";
+import _ from "lodash";
+import * as jwt from "jsonwebtoken";
 
 import { UserRepository } from "@/repository";
+import errors from "@/common/errors";
+import wrapAsync from "@/common/async";
 import utils from "@/common/utils";
 import { User } from "@/entity";
-import { getManager } from "typeorm";
+import config from "@/config/config";
+
 const route = Router();
 const userRouter = (app: Router) => {
   app.use("/auth", route);
@@ -29,15 +34,20 @@ const userRouter = (app: Router) => {
       next
     );
 
-    const user = new User();
-    user.email = email;
-    user.nickname = nickname;
-    user.name = name;
-    user.password = password;
+    const user = await userRepository.findOne({ email });
+
+    if (_.size(user)) {
+      throw new Error(errors.reject("이미 가입한 회원입니다."));
+    }
+
+    const userEntity = new User();
+    userEntity.email = email;
+    userEntity.nickname = nickname;
+    userEntity.name = name;
+    userEntity.password = password;
 
     try {
-      // ** todo throw error && error reject
-      await userRepository.saveUsingManager(user);
+      await userRepository.saveUsingManager(userEntity);
       res.send({
         status: 200,
       });
@@ -45,23 +55,29 @@ const userRouter = (app: Router) => {
       throw error;
     }
   };
-  route.post("/signup", createUser);
+  route.post("/signup", wrapAsync(createUser));
 
-  const findUser = async (req: Request, res: Response, next: NextFunction) => {
-    // const authServiceInstance = Container.get(AuthService);
-    // const { user, token } = await authServiceInstance.SignUp(
-    //   req.body as IUserInputDTO
-    // );
-
-    const postRepository = getManager().getRepository(User);
-
-    const posts = await postRepository.find();
-    // const courtRepository = Container.get(CourtRepository);
-    // debugger;
-    res.send({ userId: 3 });
-    // return res.status(201).json({ user, token });
+  const getUserSchema = {
+    email: Joi.string().required(),
+    password: Joi.string().required(),
   };
-  route.get("/finduser", findUser);
+  const getUser = async (req: Request, res: Response, next: NextFunction) => {
+    const { email, password } = utils.validate(getUserSchema, req, next);
+
+    const user = await userRepository.findOne({ email });
+
+    if (!user?.compareHashPassword(password)) {
+      throw new Error(errors.reject("일치하는 회원정보가 없습니다."));
+    }
+
+    const token = jwt.sign(
+      { userId: user.id, username: user.name },
+      config.jwtSecret,
+      { expiresIn: "1h" }
+    );
+    res.send(token);
+  };
+  route.get("/signin", wrapAsync(getUser));
 
   const updateUser = async (
     req: Request,
@@ -71,6 +87,6 @@ const userRouter = (app: Router) => {
     res.send("updateComplete");
   };
 
-  route.put("/updateuser", updateUser);
+  route.put("/updateuser", wrapAsync(updateUser));
 };
 export default userRouter;

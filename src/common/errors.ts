@@ -1,18 +1,18 @@
 interface errorForm {
   message?: string;
-  statusCode?: number;
+  status?: number;
   hint?: string;
 }
 
-const encode = ({ message, statusCode, hint }) => {
+const encode = ({ message, status, hint }) => {
   const form: errorForm = {};
   console.log("encode");
   if (message) {
     form.message = message;
   }
 
-  if (statusCode) {
-    form.statusCode = statusCode;
+  if (status) {
+    form.status = status;
   }
 
   if (hint) {
@@ -29,7 +29,7 @@ const decode = (encoded) => {
 const internal = (errorMessage) => {
   return encode({
     message: "서버 처리 도중 로직 오류가 발생하였습니다.",
-    statusCode: 500,
+    status: 500,
     hint: errorMessage,
   });
 };
@@ -38,7 +38,7 @@ const reject = (errorMessage) => {
   return encode({
     message: errorMessage,
     hint: "권한이 없습니다.",
-    statusCode: 400,
+    status: 400,
   });
 };
 
@@ -46,7 +46,7 @@ const noSession = (message) => {
   return encode({
     message,
     hint: "인증정보가 없습니다.",
-    statusCode: 401,
+    status: 401,
   });
 };
 
@@ -60,7 +60,7 @@ const db = (error) => {
 
   return encode({
     message: "서버 처리 도중 데이터 오류가 발생하였습니다.",
-    statusCode: 500,
+    status: 500,
     hint: {
       code: error.code,
       sqlMessage: error.sqlMessage,
@@ -73,7 +73,7 @@ const db = (error) => {
 const cipher = (error) => {
   return encode({
     message: "암호처리 도중 오류가 발생하였습니다.",
-    statusCode: 500,
+    status: 500,
     hint: {
       ...error,
     },
@@ -84,18 +84,18 @@ const iamport = (error) => {
   const { message } = error.error;
   return encode({
     message: "서버 결제 처리 도중 오류가 발생 하였습니다.",
-    statusCode: 500,
+    status: 500,
     hint: message ? message : "처리되지 않은 아임포트 요청 오류 입니다.",
   });
 };
 
 const storage = (error) => {
-  const { statusCode, statusMessage } = error.response;
+  const { status, statusMessage } = error.response;
   return encode({
     message: "저장소 처리 도중 오류가 발생 하였습니다.",
-    statusCode: 500,
+    status: 500,
     hint: {
-      storageStatusCode: statusCode,
+      storagestatus: status,
       storageStatusMessage: statusMessage,
     },
   });
@@ -104,7 +104,7 @@ const storage = (error) => {
 const email = (error) => {
   return encode({
     message: "이메일 전송에 실패 하였습니다.",
-    statusCode: 500,
+    status: 500,
     hint: error,
   });
 };
