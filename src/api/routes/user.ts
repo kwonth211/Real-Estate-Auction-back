@@ -75,7 +75,10 @@ const userRouter = (app: Router) => {
       config.jwtSecret,
       { expiresIn: "1h" }
     );
-    res.send(token);
+    res.send({
+      status: 200,
+      token,
+    });
   };
   route.get("/signin", wrapAsync(getUser));
 

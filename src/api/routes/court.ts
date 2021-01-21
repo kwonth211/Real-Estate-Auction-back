@@ -3,6 +3,7 @@ import { Container } from "typedi";
 import { CourtRepository, LandRepository } from "@/repository";
 import utils from "@/common/utils";
 import wrapAsync from "@/common/async";
+import checkJwt from "@/middlewares/checkJwt";
 const route = Router();
 const courtRouter = (app: Router) => {
   app.use("/court", route);
