@@ -1,16 +1,17 @@
-import { Router, Request, Response, NextFunction } from "express";
+import express, { Router, Response, NextFunction } from "express";
 import { Container } from "typedi";
 import Joi from "@hapi/joi";
 import _ from "lodash";
 import * as jwt from "jsonwebtoken";
 
+import { RequestCustom } from "@/types/express";
+import checkJwt from "@/middlewares/checkJwt";
 import { UserRepository } from "@/repository";
 import errors from "@/common/errors";
 import wrapAsync from "@/common/async";
 import utils from "@/common/utils";
 import { User } from "@/entity";
 import config from "@/config/config";
-
 const route = Router();
 const userRouter = (app: Router) => {
   app.use("/auth", route);
@@ -81,6 +82,25 @@ const userRouter = (app: Router) => {
     });
   };
   route.get("/signin", wrapAsync(getUser));
+
+  const getSession = async (
+    req: RequestCustom,
+    res: Response,
+    next: NextFunction
+  ) => {
+    if (req.user) {
+      res.send({
+        status: 200,
+      });
+      return;
+    }
+    res.send({
+      status: 200,
+      user: req.user,
+    });
+  };
+
+  route.get("/session", checkJwt, wrapAsync(getSession));
 
   const updateUser = async (
     req: Request,

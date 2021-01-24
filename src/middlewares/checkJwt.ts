@@ -5,10 +5,8 @@ import errors from "@/common/errors";
 
 const checkJwt = (req: Request, res: Response, next: NextFunction) => {
   //@Get the jwt token from the head
-  const token = <string>req.headers["auth"];
+  const token = <string>req.headers["authorization"];
   let jwtPayload;
-
-  console.log("token>>>", token);
 
   //Try to validate the token and get data
   try {

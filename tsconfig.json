@@ -9,6 +9,7 @@
     "paths": {
       "@/*": ["src/*"]
     },
+    "typeRoots": ["./node_modules/@types", "src/types"],
     "esModuleInterop": true,
     "experimentalDecorators": true,
     "emitDecoratorMetadata": true
