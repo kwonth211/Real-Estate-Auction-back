@@ -29,19 +29,21 @@ const sessionMiddleware = async (req, res, next) => {
   }
   const cached = cache.get(token);
 
-  if (false) {
-    res.setHeader("user", cached);
+  if (cached) {
+    req.user = cached;
   } else {
     const userRepository = Container.get(UserRepository);
-    const { userId } = jwt.verify(token, config.jwtSecret);
-
-    const user = await userRepository.findOne({ id: userId });
-    if (user) {
-      cache.set(token, user);
-      req.user = user;
+    try {
+      const { userId } = jwt.verify(token, config.jwtSecret);
+      const user = await userRepository.findOne({ id: userId });
+      if (user) {
+        cache.set(token, user);
+        req.user = user;
+      }
+    } catch (error) {
+    } finally {
+      return await next();
     }
-
-    return await next();
   }
 };
 

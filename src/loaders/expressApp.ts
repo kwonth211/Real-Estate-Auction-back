@@ -44,5 +44,5 @@ export default ({ app }: { app: express.Application }) => {
     return next(err);
   });
 
-  app.use(ErrorMiddleWare);
+  app.use(wrapAsync(ErrorMiddleWare));
 };

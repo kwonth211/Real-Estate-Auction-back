@@ -10,8 +10,6 @@ const naverCrawling = async (page, courtList: Array<court>) => {
 
     locationList.forEach(({ location, area }) => {
       // 법원 매물이 여러개 있을때를 생각해 봐야함.
-      // console.log(location);
-      // console.log(area);
     });
 
     const { location } = locationList[0];

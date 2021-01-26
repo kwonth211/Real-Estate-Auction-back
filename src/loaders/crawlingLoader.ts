@@ -30,6 +30,14 @@ export interface land {
   area?: string;
 }
 
+export interface User {
+  id: number;
+  email: string;
+  nickname: string;
+  name: string;
+  password: string;
+}
+
 const crawlingLoader = async () => {
   console.log("== 크롤링 시작 ==");
 

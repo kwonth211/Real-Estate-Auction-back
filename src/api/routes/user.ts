@@ -88,7 +88,7 @@ const userRouter = (app: Router) => {
     res: Response,
     next: NextFunction
   ) => {
-    if (req.user) {
+    if (!req.user) {
       res.send({
         status: 200,
       });
@@ -100,7 +100,7 @@ const userRouter = (app: Router) => {
     });
   };
 
-  route.get("/session", checkJwt, wrapAsync(getSession));
+  route.get("/session", wrapAsync(getSession));
 
   const updateUser = async (
     req: Request,
