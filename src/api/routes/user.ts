@@ -58,12 +58,12 @@ const userRouter = (app: Router) => {
   };
   route.post("/signup", wrapAsync(createUser));
 
-  const getUserSchema = {
+  const siginInSchema = {
     email: Joi.string().required(),
     password: Joi.string().required(),
   };
-  const getUser = async (req: Request, res: Response, next: NextFunction) => {
-    const { email, password } = utils.validate(getUserSchema, req, next);
+  const signIn = async (req: Request, res: Response, next: NextFunction) => {
+    const { email, password } = utils.validate(siginInSchema, req, next);
 
     const user = await userRepository.findOne({ email });
 
@@ -81,7 +81,26 @@ const userRouter = (app: Router) => {
       token,
     });
   };
-  route.get("/signin", wrapAsync(getUser));
+  route.get("/signin", wrapAsync(signIn));
+
+  const getUserInfo = async (
+    req: Request,
+    res: Response,
+    next: NextFunction
+  ) => {
+    res.send({ status: 200 });
+  };
+  route.get("/user-info", checkJwt, wrapAsync(getUserInfo));
+
+  // const signOut = (req: Request, res: Response, next: NextFunction) => {
+  //   // ctx.cookies.set(ACCESS_TOKEN);
+
+  //   res.send({
+  //     status: 200,
+  //     message: "로그아웃 되었습니다.",
+  //   });
+  // };
+  // route.get("s", wrapAsync(signOut));
 
   const getSession = async (
     req: RequestCustom,

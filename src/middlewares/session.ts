@@ -16,8 +16,6 @@ import { Container } from "typedi";
 const sessionMiddleware = async (req, res, next) => {
   const token = <string>req.headers["authorization"];
 
-  console.log("middware call >", token);
-
   if (!token) {
     return await next();
   }
@@ -28,9 +26,9 @@ const sessionMiddleware = async (req, res, next) => {
     });
   }
   const cached = cache.get(token);
-
   if (cached) {
     req.user = cached;
+    return await next();
   } else {
     const userRepository = Container.get(UserRepository);
     try {
