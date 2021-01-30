@@ -1,7 +1,3 @@
-//
-// Copyright 2020 fastcampus language
-//
-
 import LRU from "lru-cache";
 import * as jwt from "jsonwebtoken";
 import config from "../config/config";

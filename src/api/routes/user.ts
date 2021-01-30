@@ -92,16 +92,6 @@ const userRouter = (app: Router) => {
   };
   route.get("/user-info", checkJwt, wrapAsync(getUserInfo));
 
-  // const signOut = (req: Request, res: Response, next: NextFunction) => {
-  //   // ctx.cookies.set(ACCESS_TOKEN);
-
-  //   res.send({
-  //     status: 200,
-  //     message: "로그아웃 되었습니다.",
-  //   });
-  // };
-  // route.get("s", wrapAsync(signOut));
-
   const getSession = async (
     req: RequestCustom,
     res: Response,
